@@ -45,7 +45,7 @@ procedureTest PROC ; if we use the stack for arguments, we can't use "uses" beca
         ; remove local variables. This must be done before we pop ebp to the previous stack frame or else we'll pop the local variable values into ebp
         mov         esp, ebp
 
-        pop         ebp
+        pop         ebp 
         ret         8
 procedureTest ENDP
 END main
