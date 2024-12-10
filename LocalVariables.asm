@@ -30,13 +30,17 @@ main PROC
 
         Invoke      ExitProcess,0
 main ENDP
+
+X_local EQU DWORD PTR [ebp-4]                           ; Or I can define more readable versions 
+Y_local EQU DWORD PTR [ebp-8]                           ; This would make it sooo much more readable.
+                                                        ; I could do the same thing for the parameters. 
 procedureTest PROC ; if we use the stack for arguments, we can't use "uses" because that messes with the stack frame and messes up our offsets for the arguments
         push        ebp
         mov         ebp, esp
 
         ; set local variables
-        mov         DWORD PTR [ebp - 4], 3              ; first local variable
-        mov         DWORD PTR [ebp - 8], 1              ; second local variable
+        mov         DWORD PTR [ebp - 4], 3              ; first local variable, |          mov  X_local, 4
+        mov         DWORD PTR [ebp - 8], 1              ; second local variable |          mov  Y_local, 1
 
         ; get parameters
         mov         eax, [ebp+8]                        ; first number
