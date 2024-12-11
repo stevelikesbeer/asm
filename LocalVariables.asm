@@ -28,7 +28,7 @@ main PROC
         push        SecondNumber
         call        procedureTest
 
-        Invoke      ExitProcess,0
+        Invoke      ExitProcess,0						; I could also "push 0", then "call ExitProcess" but i might have to change the prototype
 main ENDP
 
 X_local EQU DWORD PTR [ebp-4]                           ; Or I can define more readable versions 
