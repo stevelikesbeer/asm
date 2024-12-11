@@ -39,6 +39,7 @@ procedureTest PROC ; if we use the stack for arguments, we can't use "uses" beca
         mov         ebp, esp
 
         ; set local variables
+        sub			esp, 8								; "make room" for local variables. The room is already there we're just extending what we consider the stack frame manually
         mov         DWORD PTR [ebp - 4], 3              ; first local variable, |          mov  X_local, 4
         mov         DWORD PTR [ebp - 8], 1              ; second local variable |          mov  Y_local, 1
 

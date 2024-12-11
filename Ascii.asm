@@ -55,6 +55,8 @@ main PROC
         aaa                                             ; AX = 0100h   How does it do this? I dont think verys simply, it just knows 6A unpacked is 0100 (or '8'+'2' = unpacked 0100h ready to be xored)
         or          ax, 3030h                           ; AX = 3130h = '10' (Convert to ascii)
 
+
+        ; ===
         Invoke      ExitProcess,0
 main ENDP
 END main
