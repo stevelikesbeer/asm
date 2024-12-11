@@ -53,4 +53,18 @@ procedureTest PROC ; if we use the stack for arguments, we can't use "uses" beca
         pop         ebp 
         ret         8
 procedureTest ENDP
+
+localKeywordTest PROC
+		LOCAL 		tmp:DWORD							; The LOCAL MACRO also sets up the prologue. 
+														; it does the following:
+														;	push ebp
+														;   mov  ebp, esp
+														;   sub  esp, 4    (technically I think it adds 0FFFFFFFCh or -4) to make space for local variable DWORD
+														; It also makes tmp = [ebp -4]
+														; It also adds "leave" to the epilogue, popping ebp 
+		xor			eax,eax								; clear out eax
+		mov			tmp, eax							; assign a blank value to tmp. I think this is required
+
+		ret
+localKeywordTest ENDP
 END main
