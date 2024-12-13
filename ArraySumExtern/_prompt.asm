@@ -1,13 +1,8 @@
-;.model flat, stdcall
+.model flat, stdcall
 
-IncludeLib C:\Irvine\Kernel32.lib
-IncludeLib C:\Irvine\User32.lib
-IncludeLib C:\Irvine\Irvine32.lib
-
-Include C:\Irvine\Irvine32.inc
-;WriteString     PROTO   ; edx
-;ReadInt         PROTO   ; eax
-;Crlf            PROTO
+WriteString     PROTO   ; edx
+ReadInt         PROTO   ; eax
+Crlf            PROTO
 
 .code
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -17,7 +12,7 @@ Include C:\Irvine\Irvine32.inc
 ;
 ; Input: 
 ;       ptrPrompt:PTR BYTE  +8
-;       ptrArray:PTR BYTE   +12
+;       ptrArray:PTR DWORD  +12
 ;       arraySize:DWORD     +16
 ; Returns: Nothing
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -52,7 +47,5 @@ J1:     popad
         pop         ebp
         ret
 PromptForIntegers ENDP
-END PromptForIntegers
+END
 
-; ml /c /coff _prompt.asm
-; lib /out:_prompt.lib _prompt.obj

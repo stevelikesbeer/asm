@@ -1,10 +1,5 @@
 .model flat, stdcall
 
-IncludeLib C:\Irvine\Kernel32.lib
-IncludeLib C:\Irvine\User32.lib
-IncludeLib C:\Irvine\Irvine32.lib
-;Include C:\Irvine\Irvine32.inc
-
 .code
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;                       ArraySum

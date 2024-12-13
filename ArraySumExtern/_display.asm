@@ -1,11 +1,8 @@
-IncludeLib C:\Irvine\Kernel32.lib
-IncludeLib C:\Irvine\User32.lib
-IncludeLib C:\Irvine\Irvine32.lib
+.model flat, stdcall
 
-;WriteString     PROTO
-;WriteInt        PROTO
-;Crlf            PROTO
-Include C:\Irvine\Irvine32.inc
+WriteString     PROTO
+WriteInt        PROTO
+Crlf            PROTO
 
 .code
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -16,7 +13,7 @@ Include C:\Irvine\Irvine32.inc
 ; Input: 
 ;       thePrompt:PTR BYTE   +8
 ;       theSum:DWORD     +12
-; Returns: EAX = sum
+; Returns: Nothing
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 DisplaySum PROC
         theSum      EQU [ebp + 12]
@@ -26,7 +23,7 @@ DisplaySum PROC
         mov         ebp, esp
         pushad
 
-        mov         eax, thePrompt
+        mov         edx, thePrompt
         call        WriteString
         mov         eax, theSum
         call        WriteInt
