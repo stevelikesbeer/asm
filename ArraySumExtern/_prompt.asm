@@ -52,7 +52,12 @@ J1:     popad
         pop         ebp
         ret
 PromptForIntegers ENDP
-END PromptForIntegers
+END
 
 ; ml /c /coff _prompt.asm
 ; lib /out:_prompt.lib _prompt.obj
+
+; OHH I CAN GET RID OF the below error BY GETTING RID OF THE ENTRY POINT HERE. It seems okay if I do this and convert it to obj with /coff
+;
+; warning LNK4258: directive '/ENTRY:PromptForIntegers@0' not compatible with switch '/ENTRY:main@0'; ignored
+; this is given when assembling and linking sum_main.asm  how to get rid of it
