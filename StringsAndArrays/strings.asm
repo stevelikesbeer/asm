@@ -20,7 +20,8 @@ Crlf            PROTO
 DumpRegs        PROTO
 
 .data
-
+        firstString BYTE "This is some string data!", 0
+        secondString BYTE LENGTHOF firstString DUP(?)
 .code
 main PROC
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -61,13 +62,49 @@ main PROC
 ; repeats, using ECX as a counter. The repeat prefix permits you to process an 
 ; entire array using a single instruction
 ;===
-;REP 
+; REP 
 ;   Repeat while ECX > 0
-;REPZ, REPE 
+; REPZ, REPE 
 ;   Repeat while the Zero flag is set and ECX > 0
-;REPNZ, REPNE 
+; REPNZ, REPNE 
 ;   Repeat while the Zero flag is clear and ECX > 0
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+; Move string instructions: MOVSB, MOVSW, and MOVSD
+        cld                                             ; clear the direction flag (more on this later)
+        mov         esi, OFFSET firstString
+        mov         edi, OFFSET secondString
+        mov         ecx, LENGTHOF firstString
+
+        ; repeat prefix first tests ECX > 0 before executing the MOVSB instruction. If ECX = 0,
+        ; the instruction is ignored and control passes to the next line in the program
+        rep         movsb
+        ; rep increments (or decrements) esi and edi. After the move, esi and edi point to one position (b,w, or d)
+        ;     beyond the end of each array
+
+        ; confirm results
+        mov         edx, OFFSET secondString
+        call        WriteString
+
+        ; ESI and EDI are automatically incremented when MOVSB repeats. This behavior is controlled
+        ; by the CPU’s Direction flag
+        ; 
+        ;                       *** DIRECTION FLAG ***
+        ; String primitive instructions increment or decrement ESI and EDI based on the state of the Direction flag
+        ; The Direction flag can be explicitly modified using the CLD and STD instructions:
+        ;       CLD : clear Direction flag (forward direction)
+        ;       STD : set Direction flag (reverse direction)
+        ;
+        ; ___________________________________________________________________________________________
+        ; |     Value of the Direction Flag     |   Effect on ESI and EDI   |   Address Sequence    |
+        ; -------------------------------------------------------------------------------------------
+        ; |             Clear (CLD)             |       Incremented         |       Low-high        |
+        ; -------------------------------------------------------------------------------------------
+        ; |             Set (STD)               |       Decremented         |       High-low        |
+        ; -------------------------------------------------------------------------------------------
+
+
         Invoke      ExitProcess,0
 main ENDP
 END main
