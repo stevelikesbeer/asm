@@ -22,6 +22,12 @@ DumpRegs        PROTO
 .data
         firstString BYTE "This is some string data!", 0
         secondString BYTE LENGTHOF firstString DUP(?)
+        thirdString  BYTE "This is pretty Cool!", 0
+        fourthString BYTE "This is pretty Cool!", 0
+        fifthString BYTE "This is pretty cool", 0
+
+        MessageEqual BYTE "They are equal!", 0
+        MessageNotEqual BYTE "They are not equal", 0
 .code
 main PROC
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -86,6 +92,8 @@ main PROC
         ; confirm results
         mov         edx, OFFSET secondString
         call        WriteString
+        call        Crlf
+        call        Crlf
 
         ; ESI and EDI are automatically incremented when MOVSB repeats. This behavior is controlled
         ; by the CPU’s Direction flag
@@ -104,7 +112,33 @@ main PROC
         ; |             Set (STD)               |       Decremented         |       High-low        |
         ; -------------------------------------------------------------------------------------------
 
+; Compare string instructions: CMPSB CMPSW CMPSD
+        ; test when two strings are equal
+        mov         esi, OFFSET thirdString
+        mov         edi, OFFSET fourthString
+        mov         ecx, LENGTHOF thirdString
+        cld
+        repe        cmpsb                               ; if they're equal ZF should be set
+        jnz         J1                                  ; if zero is not set, jump to not equal message
+        mov         edx, OFFSET MessageEqual
+        call        WriteString
+        jmp         J2
+J1:     mov         edx, OFFSET MessageNotEqual
+        call        WriteString
+J2:     call        Crlf
 
+        ; test when two strings are not equal
+        mov         edi, OFFSET fifthString
+        mov         ecx, LENGTHOF fifthString
+        cld
+        repe        cmpsb
+        jne         J3                                  ; I can also use jne instead of jnz for clarity
+        mov         edx, OFFSET MessageEqual
+        call        WriteString
+        jmp         J4
+J3:     mov         edx, OFFSET MessageNotEqual
+        call        WriteString
+J4:
         Invoke      ExitProcess,0
 main ENDP
 END main
