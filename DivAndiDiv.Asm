@@ -210,86 +210,86 @@ main PROC
 
         mov         edx, OFFSET Message8bitSignedDivision
         call        WriteString
-		call		Crlf
+        call        Crlf
 
         mov         edx, OFFSET MessageQuotient
         call        WriteString
-		mov			bh, ah
-		movsx		eax, al
-		call		WriteInt
-		call		Crlf
+        mov         bh, ah
+        movsx       eax, al
+        call        WriteInt
+        call        Crlf
 
-		mov			edx, OFFSET MessageRemainder
-		call		WriteString
-		mov			al, bh
-		movsx		eax, al
-		call		WriteInt
-        call		Crlf
-		call		Crlf
+        mov         edx, OFFSET MessageRemainder
+        call        WriteString
+        mov         al, bh
+        movsx       eax, al
+        call        WriteInt
+        call        Crlf
+        call        Crlf
 
 ; === 16 bit signed idiv ===
-		mov			eax, 0
+        mov         eax, 0
 
-		; do the division
-		mov			ax, SWordValiDiv					; - 5000
-		mov			bx, +256							; 256
-		cwd												; sign extend ax into dx
-		idiv		bx									; dx:ax, -136:-19    remainder:quotient
+        ; do the division
+        mov         ax, SWordValiDiv                    ; - 5000
+        mov         bx, +256                            ; 256
+        cwd                                             ; sign extend ax into dx
+        idiv        bx                                  ; dx:ax, -136:-19    remainder:quotient
 
-		; write 16 bit header info
-		mov			cx, dx								; keep a copy of dx(remainder), while we use edx to write a string
-		mov			edx, OFFSET Message16bitSignedDivision
-		call		WriteString
-		call		Crlf
+        ; write 16 bit header info
+        mov         cx, dx                              ; keep a copy of dx(remainder), while we use edx to write a string
+        mov         edx, OFFSET Message16bitSignedDivision
+        call        WriteString
+        call        Crlf
 
-		; write quotient message and print the quotient
-		mov			edx, OFFSET MessageQuotient
-		call		WriteString
-		movsx		eax,ax								; sign extend ax so when we call WriteInt it prints the correct number
-		call		WriteInt
-		call		Crlf
+        ; write quotient message and print the quotient
+        mov         edx, OFFSET MessageQuotient
+        call        WriteString
+        movsx       eax,ax                              ; sign extend ax so when we call WriteInt it prints the correct number
+        call        WriteInt
+        call        Crlf
 
-		; write remainder message and print the remainder
-		mov			edx, OFFSET MessageRemainder
-		call		WriteString
-		mov			ax, cx								; move the remainder into ax, and write it on screen
-		movsx		eax, ax
-		call		WriteInt
-		call		Crlf
-		call		Crlf
+        ; write remainder message and print the remainder
+        mov         edx, OFFSET MessageRemainder
+        call        WriteString
+        mov         ax, cx                              ; move the remainder into ax, and write it on screen
+        movsx       eax, ax
+        call        WriteInt
+        call        Crlf
+        call        Crlf
 
 ; === 32 bit signed idiv ===
 
-		mov			eax, SDwordValiDiv					; 50,000
-		mov			ebx, -256
-		cdq												; sign extend eax into edx
-		idiv		ebx									; EDX:EAX Remainder:Quotient   80:-195
+        mov         eax, SDwordValiDiv                  ; 50,000
+        mov         ebx, -256
+        cdq                                             ; sign extend eax into edx
+        idiv        ebx                                 ; EDX:EAX Remainder:Quotient   80:-195
 
-		mov			ebx, edx							; save the remainder while we print MessageSignExtensionExample
+        mov         ebx, edx                            ; save the remainder while we print MessageSignExtensionExample
 
-		mov			edx, OFFSET Message32bitSignedDivision
-		call		WriteString
-		call		Crlf
+        mov         edx, OFFSET Message32bitSignedDivision
+        call        WriteString
+        call        Crlf
 
-		mov			edx, OFFSET MessageQuotient
-		call		WriteString
-		call		WriteInt							; eax has the quotient
-		call		Crlf
+        mov         edx, OFFSET MessageQuotient
+        call        WriteString
+        call        WriteInt                            ; eax has the quotient
+        call        Crlf
 
-		mov			edx, OFFSET MessageRemainder
-		call		WriteString
-		mov			eax, ebx							; move the remainder into eax so we can WriteInt
-		call		WriteInt
+        mov         edx, OFFSET MessageRemainder
+        call        WriteString
+        mov         eax, ebx                            ; move the remainder into eax so we can WriteInt
+        call        WriteInt
 
 ; === *** DIVIDE OVERFLOW *** ===
 ; This will cause everything to break and a cpu interrupt to occur and the program to halt. Keep it commented out
-; 		I guess it doesn't crash the program, only dividing by 0 will
-;			okay dividing by 0 won't either? We'll move on
+;       I guess it doesn't crash the program, only dividing by 0 will
+;           okay dividing by 0 won't either? We'll move on
 ;
-;	IF YOU ARE WORRIED ABOUT DIVIDING BY 0, DO A test THEN JUMP IF ITS EQUAL TO 0 (OR A COMP)
-;		mov			ax, 1000h
-;		mov			bl, 10h
-;		div 		bl
+;   IF YOU ARE WORRIED ABOUT DIVIDING BY 0, DO A test THEN JUMP IF ITS EQUAL TO 0 (OR A COMP)
+;       mov         ax, 1000h
+;       mov         bl, 10h
+;       div         bl
 
         Invoke      ExitProcess,0
 main ENDP
@@ -300,13 +300,13 @@ main ENDP
 ; output: cl - flag status (0 or 1) as char
 getFlag PROC    uses edx eax
         pushf
-        pop     ax
+        pop         ax
         pushf
-        mov     dx, cx                          ; safe flag type
-        mov     cl, 30h                         ; 00110000b bin for char 0, 30h 
-        test    ax, dx                          ; clear all bits except for the correct flag bit
-        jz      J1                              ; if that bit is not set, jump to keep outbit as 30h / char 0
-        or      cl, 01h                         ; turn it into a 1
+        mov         dx, cx                          ; safe flag type
+        mov         cl, 30h                         ; 00110000b bin for char 0, 30h 
+        test        ax, dx                          ; clear all bits except for the correct flag bit
+        jz          J1                              ; if that bit is not set, jump to keep outbit as 30h / char 0
+        or          cl, 01h                         ; turn it into a 1
 J1:     popf
         ret
 getFlag ENDP

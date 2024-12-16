@@ -28,7 +28,7 @@ main PROC
         push        SecondNumber
         call        procedureTest
 
-        Invoke      ExitProcess,0						; I could also "push 0", then "call ExitProcess" but i might have to change the prototype
+        Invoke      ExitProcess,0                       ; I could also "push 0", then "call ExitProcess" but i might have to change the prototype
 main ENDP
 
 X_local EQU DWORD PTR [ebp-4]                           ; Or I can define more readable versions 
@@ -39,7 +39,7 @@ procedureTest PROC ; if we use the stack for arguments, we can't use "uses" beca
         mov         ebp, esp
 
         ; set local variables
-        sub			esp, 8								; "make room" for local variables. The room is already there we're just extending what we consider the stack frame manually
+        sub         esp, 8                              ; "make room" for local variables. The room is already there we're just extending what we consider the stack frame manually
         mov         DWORD PTR [ebp - 4], 3              ; first local variable, |          mov  X_local, 4
         mov         DWORD PTR [ebp - 8], 1              ; second local variable |          mov  Y_local, 1
 
@@ -55,16 +55,16 @@ procedureTest PROC ; if we use the stack for arguments, we can't use "uses" beca
 procedureTest ENDP
 
 localKeywordTest PROC
-		LOCAL 		tmp:DWORD							; The LOCAL MACRO also sets up the prologue. 
-														; it does the following:
-														;	push ebp
-														;   mov  ebp, esp
-														;   sub  esp, 4    (technically I think it adds 0FFFFFFFCh or -4) to make space for local variable DWORD
-														; It also makes tmp = [ebp -4]
-														; It also adds "leave" to the epilogue, popping ebp 
-		xor			eax,eax								; clear out eax
-		mov			tmp, eax							; assign a blank value to tmp. I think this is required
+        LOCAL       tmp:DWORD                           ; The LOCAL MACRO also sets up the prologue. 
+                                                        ; it does the following:
+                                                        ;   push ebp
+                                                        ;   mov  ebp, esp
+                                                        ;   sub  esp, 4    (technically I think it adds 0FFFFFFFCh or -4) to make space for local variable DWORD
+                                                        ; It also makes tmp = [ebp -4]
+                                                        ; It also adds "leave" to the epilogue, popping ebp 
+        xor         eax,eax                             ; clear out eax
+        mov         tmp, eax                            ; assign a blank value to tmp. I think this is required
 
-		ret
+        ret
 localKeywordTest ENDP
 END main

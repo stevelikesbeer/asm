@@ -31,13 +31,13 @@ DumpRegs        PROTO
         Message16BitiMulSingleMultipliersPositive BYTE "16 bit single multipliers (Positive): 48 * 4: ",0
         Message32BitiMulSingleMultipliersNegative BYTE "32 bit single multipliers (Negative): 4823424 * -423: ",0
 
-		MessageiMulTwoOperands			BYTE "Two Operand Examples w/o overflow: ",0	
-		MessageiMulTwoOperandsOverflow	BYTE "Two Operand Examples WITH overflow: ",0	
-		MessageTwoOperands1 			BYTE "(16bit) -16*2 = -32: ",0
-		MessageTwoOperands2 			BYTE "(32bit) -16*2 = -32: ",0
-		MessageTwoOperands3 			BYTE "(16bit) Previous answer * 2: ",0
-		MessageTwoOperands4 			BYTE "(32bit) Previous answer * 2: ",0
-		MessageTwoOperands5 			BYTE "-32000 * 2 = -64000: ",0
+        MessageiMulTwoOperands          BYTE "Two Operand Examples w/o overflow: ",0    
+        MessageiMulTwoOperandsOverflow  BYTE "Two Operand Examples WITH overflow: ",0   
+        MessageTwoOperands1             BYTE "(16bit) -16*2 = -32: ",0
+        MessageTwoOperands2             BYTE "(32bit) -16*2 = -32: ",0
+        MessageTwoOperands3             BYTE "(16bit) Previous answer * 2: ",0
+        MessageTwoOperands4             BYTE "(32bit) Previous answer * 2: ",0
+        MessageTwoOperands5             BYTE "-32000 * 2 = -64000: ",0
 
         MessageMulInstructions      BYTE "******* MUL INSTRUCTIONS  *********",0
         MessageiMulInstructions     BYTE "******* IMUL INSTRUCTIONS *********",0
@@ -47,7 +47,7 @@ DumpRegs        PROTO
         FlagValue2      BYTE    ?
         TmpWordStorage  WORD    ?
         TmpDWordStorage DWORD   ?
-		word1			SWORD	4
+        word1           SWORD   4
 
         PARITY_FLAG     = 0004h
         CARRY_FLAG      = 0001h
@@ -329,219 +329,219 @@ main PROC
         ; ****=== SINGLE OPERAND 16 BIT POSITIVE (Sign Extension) ===**** 
         call        Crlf
         mov         edx, OFFSET Message16BitiMulSingleMultipliersPositive
-        call		WriteString
-		call		Crlf
+        call        WriteString
+        call        Crlf
 
-		mov			eax, 0
-		mov			ebx, 0
-		mov			ecx, 0
-		mov			edx, 0
+        mov         eax, 0
+        mov         ebx, 0
+        mov         ecx, 0
+        mov         edx, 0
 
-		; === DO THE MULTIPLICATION ===
-		mov			ax, 48
-		mov			bx, 4
-		imul		bx				; DX:AX = 000000C0h, OF = 0 because it is sign extended
+        ; === DO THE MULTIPLICATION ===
+        mov         ax, 48
+        mov         bx, 4
+        imul        bx              ; DX:AX = 000000C0h, OF = 0 because it is sign extended
 
-		; === SAVE FLAG VALUES ===
-		mov			cx, CARRY_FLAG
-		call		getFlag
-		mov			FlagValue, cl
-		mov			cx, OVERFLOW_FLAG
-		call		getFlag
-		mov			FlagValue2, cl
+        ; === SAVE FLAG VALUES ===
+        mov         cx, CARRY_FLAG
+        call        getFlag
+        mov         FlagValue, cl
+        mov         cx, OVERFLOW_FLAG
+        call        getFlag
+        mov         FlagValue2, cl
 
-		; === PRINT RESULTS ===
-		mov			ecx, eax			; We want to print edx first, so save a copy of eax somewhere safe since WriteBinB uses eax
-		mov			eax, edx			; move edx into eax so we can call write bin and print it first
-		mov			ebx, TYPE WORD		; tell WriteBinB to only print the lower word of eax
-		call		WriteBinB			; print the original edx
-		mov			al, 20h				; lets throw a space between the two
-		call		WriteChar
-		mov			eax, ecx			; lets print the original eax, move it back into place
-		call		WriteBinB
+        ; === PRINT RESULTS ===
+        mov         ecx, eax            ; We want to print edx first, so save a copy of eax somewhere safe since WriteBinB uses eax
+        mov         eax, edx            ; move edx into eax so we can call write bin and print it first
+        mov         ebx, TYPE WORD      ; tell WriteBinB to only print the lower word of eax
+        call        WriteBinB           ; print the original edx
+        mov         al, 20h             ; lets throw a space between the two
+        call        WriteChar
+        mov         eax, ecx            ; lets print the original eax, move it back into place
+        call        WriteBinB
 
-		; === PRINT THE FLAGS === ; this is sign extended because the MSB in AX is the same as all values in DX
-		call		Crlf
-		mov			edx, OFFSET MessageCarryFlagSet
-		call		WriteString
-		mov			al, FlagValue
-		call		WriteChar
-		call		Crlf
-		mov			edx, OFFSET MessageOverflowFlagSet
-		call		WriteString
-		mov			al, FlagValue2
-		call		WriteChar
-		call		Crlf
+        ; === PRINT THE FLAGS === ; this is sign extended because the MSB in AX is the same as all values in DX
+        call        Crlf
+        mov         edx, OFFSET MessageCarryFlagSet
+        call        WriteString
+        mov         al, FlagValue
+        call        WriteChar
+        call        Crlf
+        mov         edx, OFFSET MessageOverflowFlagSet
+        call        WriteString
+        mov         al, FlagValue2
+        call        WriteChar
+        call        Crlf
 
-		; ****=== SINGLE OPERAND 32 BIT Negative (Sign Extension) ===**** 
-		call		Crlf
-		mov			edx, OFFSET Message32BitiMulSingleMultipliersNegative
-		call		WriteString
-		call		Crlf
+        ; ****=== SINGLE OPERAND 32 BIT Negative (Sign Extension) ===**** 
+        call        Crlf
+        mov         edx, OFFSET Message32BitiMulSingleMultipliersNegative
+        call        WriteString
+        call        Crlf
 
-		mov			eax, 0
-		mov			ebx, 0
-		mov			ecx, 0
-		mov			edx, 0
+        mov         eax, 0
+        mov         ebx, 0
+        mov         ecx, 0
+        mov         edx, 0
 
-		; === DO THE MULTIPLICATION ===
-		mov			eax, 4823424
-		mov			ebx, -434
-		imul		ebx				; EDX:EAX FFFFFFFF:86635D80h		IS sign extended because 8h in the MSB is 10 bin 
+        ; === DO THE MULTIPLICATION ===
+        mov         eax, 4823424
+        mov         ebx, -434
+        imul        ebx             ; EDX:EAX FFFFFFFF:86635D80h        IS sign extended because 8h in the MSB is 10 bin 
 
-		; === SAVE THE FLAGS ===
-		mov			cx, CARRY_FLAG
-		call		getFlag
-		mov			FlagValue, cl
-		mov			cx, OVERFLOW_FLAG
-		call		getFlag
-		mov			FlagValue2, cl
+        ; === SAVE THE FLAGS ===
+        mov         cx, CARRY_FLAG
+        call        getFlag
+        mov         FlagValue, cl
+        mov         cx, OVERFLOW_FLAG
+        call        getFlag
+        mov         FlagValue2, cl
 
-		; === PRINT THE RESULTS ===
-		mov			ecx, eax
-		mov			eax, edx
-		call		WriteHex
-		mov			al, 3Ah
-		call		WriteChar
-		mov			eax, ecx
-		call		WriteHex
-		call		Crlf
+        ; === PRINT THE RESULTS ===
+        mov         ecx, eax
+        mov         eax, edx
+        call        WriteHex
+        mov         al, 3Ah
+        call        WriteChar
+        mov         eax, ecx
+        call        WriteHex
+        call        Crlf
 
-		; === PRINT THE FLAGS ===  flags are 0 because it IS sign extended (8h = 10b), so we can ignore upper DWORD
-		mov			edx, OFFSET MessageCarryFlagSet
-		call		WriteString
-		mov			al, FlagValue
-		call		Writechar
-		call		Crlf
-		mov			edx, OFFSET MessageOverflowFlagSet
-		call		WriteString
-		mov			al, FlagValue2
-		call		WriteChar
-		call		Crlf
-		call		Crlf
+        ; === PRINT THE FLAGS ===  flags are 0 because it IS sign extended (8h = 10b), so we can ignore upper DWORD
+        mov         edx, OFFSET MessageCarryFlagSet
+        call        WriteString
+        mov         al, FlagValue
+        call        Writechar
+        call        Crlf
+        mov         edx, OFFSET MessageOverflowFlagSet
+        call        WriteString
+        mov         al, FlagValue2
+        call        WriteChar
+        call        Crlf
+        call        Crlf
 ;
-		; ****=== TWO OPERANDS  IMUL ===**** 
-		; none of these overflow
-		mov 		ax,-16 		; AX = -16
-		mov 		bx,2 		; BX = 2
-		imul 		bx,ax 		; BX = -32
-		imul 		bx,2 		; BX = -64
-		;imul 		bx,word1 	; BX = -256	, dword1 not set
-		mov 		eax,-16 	; EAX = -16
-		mov 		ebx,2 		; EBX = 2
-		imul 		ebx,eax 	; EBX = -32
-		imul 		ebx,2 		; EBX = -64
-		;imul 		ebx,dword1 	; EBX = -256 , dword1 not set
+        ; ****=== TWO OPERANDS  IMUL ===**** 
+        ; none of these overflow
+        mov         ax,-16      ; AX = -16
+        mov         bx,2        ; BX = 2
+        imul        bx,ax       ; BX = -32
+        imul        bx,2        ; BX = -64
+        ;imul       bx,word1    ; BX = -256 , dword1 not set
+        mov         eax,-16     ; EAX = -16
+        mov         ebx,2       ; EBX = 2
+        imul        ebx,eax     ; EBX = -32
+        imul        ebx,2       ; EBX = -64
+        ;imul       ebx,dword1  ; EBX = -256 , dword1 not set
 
-		; === MULTIPLY TWO 16 BIT OPERANDS === 
-		mov			edx, OFFSET MessageiMulTwoOperands
-		call		WriteString
-		call		Crlf
-		mov			edx, OFFSET MessageTwoOperands1		; 16 bit -16 * 2
-		call		WriteString
-		mov			eax, 0
-		mov			ax, -16
-		mov			bx, 2
-		imul		bx, ax
-		mov			cx, OVERFLOW_FLAG
-		call		getFlag
-		mov			FlagValue, cl
-		movsx		eax, bx
-		call		WriteInt
-		;call		Crlf
-		mov			al, 20h
-		call		WriteChar
-		mov			edx, OFFSET MessageOverflowFlagSet
-		call		WriteString
-		mov			al, FlagValue
-		call		WriteChar
-		call		Crlf
-		mov			edx, OFFSET MessageTwoOperands3		; 16 bit previous answer * 2
-		call		WriteString
-		imul		bx, 2
-		mov			cx, OVERFLOW_FLAG
-		call		getFlag
-		mov			FlagValue, cl
-		movsx		eax, bx
-		call		WriteInt
-		mov			al, 20h
-		call		WriteChar
-		mov			edx, OFFSET MessageOverflowFlagSet
-		call		WriteString
-		mov			al, FlagValue
-		call		WriteChar
-		call		Crlf
-		call		Crlf
+        ; === MULTIPLY TWO 16 BIT OPERANDS === 
+        mov         edx, OFFSET MessageiMulTwoOperands
+        call        WriteString
+        call        Crlf
+        mov         edx, OFFSET MessageTwoOperands1     ; 16 bit -16 * 2
+        call        WriteString
+        mov         eax, 0
+        mov         ax, -16
+        mov         bx, 2
+        imul        bx, ax
+        mov         cx, OVERFLOW_FLAG
+        call        getFlag
+        mov         FlagValue, cl
+        movsx       eax, bx
+        call        WriteInt
+        ;call       Crlf
+        mov         al, 20h
+        call        WriteChar
+        mov         edx, OFFSET MessageOverflowFlagSet
+        call        WriteString
+        mov         al, FlagValue
+        call        WriteChar
+        call        Crlf
+        mov         edx, OFFSET MessageTwoOperands3     ; 16 bit previous answer * 2
+        call        WriteString
+        imul        bx, 2
+        mov         cx, OVERFLOW_FLAG
+        call        getFlag
+        mov         FlagValue, cl
+        movsx       eax, bx
+        call        WriteInt
+        mov         al, 20h
+        call        WriteChar
+        mov         edx, OFFSET MessageOverflowFlagSet
+        call        WriteString
+        mov         al, FlagValue
+        call        WriteChar
+        call        Crlf
+        call        Crlf
 
-		; === MULTIPLY TWO 32 BIT OPERANDS === 
-		mov			edx, OFFSET MessageTwoOperands2		; 32 bit -16 * 2
-		call		WriteString
-		mov			eax, -16
-		mov			ebx, 2
-		imul		ebx, eax
-		mov			cx, OVERFLOW_FLAG
-		call		getFlag
-		mov			FlagValue, cl
-		mov			eax, ebx
-		call		WriteInt
-		mov			al, 20h
-		call		WriteChar
-		mov			edx, OFFSET MessageOverflowFlagSet
-		call		WriteString
-		mov			al, FlagValue
-		call		WriteChar
-		call		Crlf
-		mov			edx, OFFSET MessageTwoOperands4		; 32 bit previous answer * 2
-		call		WriteString
-		imul		ebx, 2
+        ; === MULTIPLY TWO 32 BIT OPERANDS === 
+        mov         edx, OFFSET MessageTwoOperands2     ; 32 bit -16 * 2
+        call        WriteString
+        mov         eax, -16
+        mov         ebx, 2
+        imul        ebx, eax
+        mov         cx, OVERFLOW_FLAG
+        call        getFlag
+        mov         FlagValue, cl
+        mov         eax, ebx
+        call        WriteInt
+        mov         al, 20h
+        call        WriteChar
+        mov         edx, OFFSET MessageOverflowFlagSet
+        call        WriteString
+        mov         al, FlagValue
+        call        WriteChar
+        call        Crlf
+        mov         edx, OFFSET MessageTwoOperands4     ; 32 bit previous answer * 2
+        call        WriteString
+        imul        ebx, 2
 
-		;save flag
-		mov			cx, OVERFLOW_FLAG
-		call		getFlag
-		mov			FlagValue, cl
+        ;save flag
+        mov         cx, OVERFLOW_FLAG
+        call        getFlag
+        mov         FlagValue, cl
 
-		; write answer
-		mov			eax, ebx
-		call		WriteInt
+        ; write answer
+        mov         eax, ebx
+        call        WriteInt
 
-		; write flag
-		mov			al, 20h
-		call		WriteChar
-		mov			edx, OFFSET MessageOverflowFlagSet
-		call		WriteString
-		mov			al, FlagValue
-		call		WriteChar
-		call		Crlf
-		call		Crlf
+        ; write flag
+        mov         al, 20h
+        call        WriteChar
+        mov         edx, OFFSET MessageOverflowFlagSet
+        call        WriteString
+        mov         al, FlagValue
+        call        WriteChar
+        call        Crlf
+        call        Crlf
 
-		; === 16 BIT TWO OPERANDS WITH OVERFLOW ===
-		mov			edx, OFFSET MessageiMulTwoOperandsOverflow
-		call		WriteString
-		call		Crlf
-		mov			edx, OFFSET MessageTwoOperands5
-		call		WriteString
-		mov			bx, -32000
-		imul		bx, 2
-		mov			cx, OVERFLOW_FLAG
-		call		getFlag
-		mov			FlagValue, cl
+        ; === 16 BIT TWO OPERANDS WITH OVERFLOW ===
+        mov         edx, OFFSET MessageiMulTwoOperandsOverflow
+        call        WriteString
+        call        Crlf
+        mov         edx, OFFSET MessageTwoOperands5
+        call        WriteString
+        mov         bx, -32000
+        imul        bx, 2
+        mov         cx, OVERFLOW_FLAG
+        call        getFlag
+        mov         FlagValue, cl
 
-		movsx		eax, bx
-		call		WriteInt
-		mov			al, 20h
-		call		WriteChar
-		mov			edx, OFFSET MessageOverflowFlagSet
-		call		WriteString
-		mov			al, FlagValue
-		call		WriteChar
-		call		Crlf
-		call		Crlf
+        movsx       eax, bx
+        call        WriteInt
+        mov         al, 20h
+        call        WriteChar
+        mov         edx, OFFSET MessageOverflowFlagSet
+        call        WriteString
+        mov         al, FlagValue
+        call        WriteChar
+        call        Crlf
+        call        Crlf
 
-		; ****=== TWO OPERANDS  IMUL ===****
-		; last one overflows, no fancy printing to screen here
-		imul bx,word1,-16 ; BX = -64
-		imul ebx,dword1,-16 ; EBX = -64
-		imul ebx,dword1,-2000000000 ; OF = 1
+        ; ****=== TWO OPERANDS  IMUL ===****
+        ; last one overflows, no fancy printing to screen here
+        imul bx,word1,-16 ; BX = -64
+        imul ebx,dword1,-16 ; EBX = -64
+        imul ebx,dword1,-2000000000 ; OF = 1
 
 
         Invoke      ExitProcess,0
@@ -563,15 +563,15 @@ CrlfSafe ENDP
 
 ; input:  cx - flag type 
 ; output: cl - flag status (0 or 1) as char
-getFlag PROC    uses edx eax
+getFlag PROC uses edx eax
         pushf
-        pop     ax
+        pop         ax
         pushf
-        mov     dx, cx                          ; safe flag type
-        mov     cl, 30h                         ; 00110000b bin for char 0, 30h 
-        test    ax, dx                          ; clear all bits except for the correct flag bit
-        jz      J1                              ; if that bit is not set, jump to keep outbit as 30h / char 0
-        or      cl, 01h                         ; turn it into a 1
+        mov         dx, cx                          ; safe flag type
+        mov         cl, 30h                         ; 00110000b bin for char 0, 30h 
+        test        ax, dx                          ; clear all bits except for the correct flag bit
+        jz          J1                              ; if that bit is not set, jump to keep outbit as 30h / char 0
+        or          cl, 01h                         ; turn it into a 1
 J1:     popf
         ret
 getFlag ENDP
