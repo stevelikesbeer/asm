@@ -19,25 +19,27 @@ WriteHexB       PROTO   ; eax for hex, ebx for size
 Crlf            PROTO
 DumpRegs        PROTO
 
+EXTERN          CalculateRowSum@0:PROC
+
 .data
-    twodimensionalArray BYTE    01FFh, 0C2Ah, 0001h,  0004h,  0A000h, 1800h,
-    RowSize = ($-twodimensionalArray)
-                                6262h, 3201h, 0B03h,  0AAAAh, 0020h,  3939h,
-                                8888h, 2323h, 0DDDDh, 7481h,  7777h,  0C321h,
-                                7492h, 4769h, 0C492h, 4721h,  8471h,  0A455h
+    twodimensionalArray BYTE    4, 6, 7,  1,  2, 3
+    RowSize = ($ - twodimensionalArray)
+                        BYTE    62h, 32h, 0Bh,  0AAh, 20h,  39h
+                        BYTE    88h, 23h, 0DDh, 81h,  77h,  0C2h
+                        BYTE    3, 3, 3, 3,  3,  2
 .code
 main PROC
+        ; Arugments (Table Offset, Row Size, Row Index) Returns: Sum EAX
+        push        OFFSET twodimensionalArray
+        push        RowSize
+        push        3
+        call        CalculateRowSum@0                   ; returns eax
+        add         esp, 12                             ; remove arguments from stack
+
+        call        WriteInt
 
         Invoke      ExitProcess,0
 main ENDP
 
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; Calculates the sum of a row in a byte matrix.
-; Receives: EBX = table offset, EAX = row index,
-; ECX = row size, in bytes.
-; Returns: EAX holds the sum.
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-CalculateRowSum PROC
 
-CalculateRowSum ENDP
 END main
