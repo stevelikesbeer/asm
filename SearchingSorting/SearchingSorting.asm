@@ -11,26 +11,39 @@ ExitProcess     PROTO, dwExitCode:DWORD
 
 WriteInt        PROTO   ; eax
 WriteString     PROTO   ; edx
-WriteChar       PROTO   ; al
-WriteBin        PROTO   ; eax
-WriteBinB       PROTO   ; eax for binary, ebx for size (TYPE WORD for example)
-WriteHex        PROTO   ; eax also
-WriteHexB       PROTO   ; eax for hex, ebx for size
 Crlf            PROTO
-DumpRegs        PROTO
+
+Extern FillArray@0:PROC
+Extern PrintArray@0:PROC
+;Extern SortArray@0:PROC
+;Extern SearchArray@0:PROC
 
 .data
+        COUNT = 26
+        MainArray DWORD COUNT DUP('-')
+        ;LookupTable DWORD 'd', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' 
 
+        MessageUnsortedArray BYTE "The unsorted array is: ",0
 .code
 main PROC
         ; fill array
             ; array pointer
             ; array length
+        push        OFFSET MainArray
+        push        COUNT
+        call        FillArray@0
+        add         esp, 8;12
 
         ; print array
             ; array pointer
             ; array length
             ; pointer to message
+        push        OFFSET MainArray
+        push        COUNT
+        push        OFFSET MessageUnsortedArray
+        call        PrintArray@0
+        add         esp, 12
+
 
         ; sort array
             ; array pointer
