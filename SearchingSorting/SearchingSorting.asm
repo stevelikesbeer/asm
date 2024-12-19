@@ -1,4 +1,4 @@
-; ml xx.asm -link /subsystem:console
+; ml SearchingSorting.asm printArray.asm fillArray.asm bubblesort.asm promptUser.asm binarySearch.asm -link /subsystem:console
 .386
 .model flat,stdcall
 .stack 4096
@@ -12,32 +12,33 @@ ExitProcess     PROTO, dwExitCode:DWORD
 WriteInt        PROTO   ; eax
 WriteString     PROTO   ; edx
 Crlf            PROTO
+WriteChar       PROTO
+WriteDec        PROTO
 
 Extern FillArrayAlphabet@0:PROC
 Extern PrintArray@0:PROC
 Extern SortArray@0:PROC
-;Extern SearchArray@0:PROC
+Extern PromptUserChar@0:PROC
+Extern SearchArray@0:PROC
 
 .data
         COUNT = 26
         MainArray DWORD COUNT DUP('-')
 
-        MessageUnsortedArray BYTE "The unsorted array is: ",0
-        MessageSortedArray  BYTE "The sorted array is: ",0
+        MessageUnsortedArray    BYTE "The unsorted array is: ",0
+        MessageSortedArray      BYTE "The sorted array is: ",0
+        MessagePromptChar       BYTE "Please enter a character: ",0
+        MessageSuccess          BYTE "Found Item at index: ",0
+        MessageFailure          BYTE "Could not find item.",0
 .code
 main PROC
-        ; fill array
-            ; array pointer
-            ; array length
+        ; FillArrayAlphabet (PTRArray:DWORD, ArrayLength:DWORD)
         push        OFFSET MainArray
         push        COUNT
         call        FillArrayAlphabet@0
         add         esp, 8;12
 
-        ; print array
-            ; array pointer
-            ; array length
-            ; pointer to message
+        ; PrintArray (PTRArray:DWORD, ArrayLength:DWORD, PTRMessage:DWORD)
         push        OFFSET MainArray
         push        COUNT
         push        OFFSET MessageUnsortedArray
@@ -45,35 +46,34 @@ main PROC
         add         esp, 12
 
 
-        ; sort array
-            ; array pointer
-            ; array length
+        ; SortArray (PTRArray:DWORD, ArrayLength:DWORD)
         push        OFFSET MainArray
         push        COUNT
         call        SortArray@0
         sub         esp, 8
         
 
-        ; print array
-            ; array pointer
-            ; array length
-            ; pointer to message
+        ; PrintArray (PTRArray:DWORD, ArrayLength:DWORD, PTRMessage:DWORD)
         push        OFFSET MainArray
         push        COUNT
         push        OFFSET MessageSortedArray
         call        PrintArray@0
         add         esp, 12
 
-        ; search array
-            ; array pointer
-            ; array length
-            ; search item
+        push        OFFSET MessagePromptChar
+        call        PromptUserChar@0
+        add         esp, 4
 
-            ; returns eax of index
+        ; SearchArray (PTRArray:DWORD, ArrayLength:DWORD, SearchItem:DWORD) Returns: EAX of Index
+        push        OFFSET MainArray
+        push        COUNT
+        push        eax
+        call        SearchArray@0
+        add         esp, 12
 
-        ; print index
-            ; ptr to message
-            ; index of found message
+        call        Crlf
+        call        WriteInt
+        ; PrintArray (PTRArray:DWORD, ArrayLength:DWORD, PTRMessage:DWORD)
         Invoke      ExitProcess,0
 main ENDP
 END main
