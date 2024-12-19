@@ -12,9 +12,14 @@ Randomize   PROTO
         LookupTable DWORD 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' 
         UsedSymbol DWORD '-'
 .code
-; fill array
-            ; array pointer:DWORD
-            ; array length
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;                       FillArrayAlphabet
+; Description: Fills an array with random letters from the 
+;               alphabet. Array Size must be 26
+; Input:
+;   PTR to array: +12, DWORD
+;   Array Length: +8, DWORD. Must be 26
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 FillArrayAlphabet PROC
         push        ebp
         mov         ebp, esp

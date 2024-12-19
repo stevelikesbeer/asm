@@ -9,13 +9,15 @@ WriteString     PROTO   ; edx
 WriteChar       PROTO   ; al
 Crlf            PROTO
 
-.data
-    MessageTest BYTE "hehehe",0
 .code
-; print array
-            ; array pointer
-            ; array length
-            ; pointer to message
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;                       PrintArray
+; Description: Prints an array with elements separated by commas
+; Input:
+;   PTR to array: +16, DWORD
+;   Array Length: +12, DWORD
+;   PTR to message: +8
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 PrintArray PROC
         push        ebp
         mov         ebp, esp

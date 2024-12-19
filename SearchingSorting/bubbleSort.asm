@@ -1,19 +1,15 @@
 .386
 .model flat, stdcall
 
-
-IncludeLib  C:\Irvine\Kernel32.lib
-IncludeLib  C:\Irvine\User32.lib
-IncludeLib  C:\Irvine\Irvine32.lib
- 
- WriteInt PROTO
- Crlf       PROTO
-
 .code
-; sort array
-            ; array pointer
-            ; array length
-SortArray PROC
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;                       BubbleSort
+; Description: Sorts a DWORD array using bubble sort
+; Input:
+;   PTR to array to be sorted: +12, DWORD
+;   Array Length: +8, DWORD
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+BubbleSort PROC
         push        ebp
         mov         ebp, esp
         sub         esp, 4                              ; you CAN do it this way, just with modern cpus it's more efficient to push/pop
@@ -41,5 +37,5 @@ J2:     add         esi, TYPE DWORD
         add         esp, 4
         pop         ebp
         ret
-SortArray ENDP
+BubbleSort ENDP
 END

@@ -3,7 +3,7 @@
 
 .code
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;                       SearchArray
+;                       BinarySearch
 ; Description: Searches an array of DWORDS using Binary Search
 ; Input:
 ;   PTR to array to be searched: +16, DWORD
@@ -11,9 +11,10 @@
 ;   Search Term: +8, DWORD
 ; Returns: EAX holds index if found, -1 if not found.
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-SearchArray PROC
+BinarySearch PROC
         push        ebp
         mov         ebp, esp
+        sub         esp, 4
         push        ebx
         push        ecx
         push        edx
@@ -21,6 +22,7 @@ SearchArray PROC
         push        esi
 
         mov         eax, -1                             ; store the default index value in a local variable
+        mov         [ebp-4], eax
         mov         edx, [ebp+8]                        ; search term
         mov         ecx, [ebp+16]                       ; array head
         mov         esi, 0                              ; start index
@@ -45,14 +47,16 @@ J1:     mov         ebx, edi                            ; startIndex+EndIndex/2 
 J4:     mov         esi, ebx                            ; midpoint < requested item, we need to make the midpoint the new startpiont
         jmp         J1
 
-J2:     mov         eax, ebx                            ; J2: Item found, Update found index value
+J2:     mov         [ebp-4], ebx                        ; J2: Item found, Update found index value
 
-J3:     pop         esi                                 
+J3:     mov         eax, [ebp-4]                        ; Return index in eax
+        pop         esi                                 
         pop         edi
         pop         edx
         pop         ecx
         pop         ebx
+        add         esp, 4
         pop         ebp
         ret
-SearchArray ENDP
+BinarySearch ENDP
 END
