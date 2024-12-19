@@ -13,17 +13,17 @@ WriteInt        PROTO   ; eax
 WriteString     PROTO   ; edx
 Crlf            PROTO
 
-Extern FillArray@0:PROC
+Extern FillArrayAlphabet@0:PROC
 Extern PrintArray@0:PROC
-;Extern SortArray@0:PROC
+Extern SortArray@0:PROC
 ;Extern SearchArray@0:PROC
 
 .data
         COUNT = 26
         MainArray DWORD COUNT DUP('-')
-        ;LookupTable DWORD 'd', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' 
 
         MessageUnsortedArray BYTE "The unsorted array is: ",0
+        MessageSortedArray  BYTE "The sorted array is: ",0
 .code
 main PROC
         ; fill array
@@ -31,7 +31,7 @@ main PROC
             ; array length
         push        OFFSET MainArray
         push        COUNT
-        call        FillArray@0
+        call        FillArrayAlphabet@0
         add         esp, 8;12
 
         ; print array
@@ -48,11 +48,21 @@ main PROC
         ; sort array
             ; array pointer
             ; array length
+        push        OFFSET MainArray
+        push        COUNT
+        call        SortArray@0
+        sub         esp, 8
+        
 
-        ; print array;
+        ; print array
             ; array pointer
             ; array length
             ; pointer to message
+        push        OFFSET MainArray
+        push        COUNT
+        push        OFFSET MessageSortedArray
+        call        PrintArray@0
+        add         esp, 12
 
         ; search array
             ; array pointer

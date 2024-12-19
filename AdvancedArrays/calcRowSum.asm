@@ -25,7 +25,7 @@ CalculateRowSum PROC
         mov         eax, [ebp + 12]                   
         mul         DWORD PTR [ebp + 8]
 
-        ; calculate absolute offset of the row:
+        ; Calculate absolute offset of the row:
         ; To convert relative row offset to absolute, we add it to the table offset.
         ;       If the table offset is at memory location 0020h, we add relative row offset to it (30 bytes for example (10 row size * third row))
         ;       The address in our program memory where we find the row is 003Eh (62d = table offset (32d or 0020h) + relative row offset (30d, 001Eh)

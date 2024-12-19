@@ -13,40 +13,33 @@ Randomize   PROTO
         UsedSymbol DWORD '-'
 .code
 ; fill array
-            ; array pointer
+            ; array pointer:DWORD
             ; array length
-FillArray PROC
+FillArrayAlphabet PROC
         push        ebp
         mov         ebp, esp
         pushad
-
         mov         ecx, [ebp+8]
         mov         esi, [ebp+12]
 
         call        Randomize                           ; Generates a random seed for RandomRange or else we get non-random numbers
-
-L1:     
-J4:     mov         eax, 26
+L1:     mov         eax, 26
         call        RandomRange                         ; does indeed generate random number between 0-25
 
-        mov         ebx, [OFFSET LookupTable+eax*TYPE DWORD]    ; find a random item from the lookup table, store it in ebx. This works.
-
-        ; check if it's a previously used character, if it was already used, jump to the top and try to find another random
-        cmp         ebx, UsedSymbol                            
-        jne         J1        
-        jmp         J4                                  
+        mov         ebx, [OFFSET LookupTable+eax*TYPE DWORD]    ; find a random item from the lookup table, store it in ebx.
+        cmp         ebx, UsedSymbol                     ; Check if a character has been used already
+        jne         J1                                  ; If it wasn't used before, continue down the loop body
+        jmp         L1                                  ; If it has been used before, jump to the top of the loop and try finding another letter
 
 J1:     mov         [esi], ebx                          ; fill the input array
 
         ; used items in the look up table get -, so they can't be used in the future.
         mov         edx, UsedSymbol
         mov         [OFFSET LookupTable+eax*TYPE DWORD], edx
-       
         add         esi, TYPE DWORD
         loop        L1
-        
         popad
         pop         ebp
         ret
-FillArray ENDP
+FillArrayAlphabet ENDP
 END

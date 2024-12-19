@@ -21,6 +21,7 @@ PrintArray PROC
         mov         ebp, esp
         pushad
 
+        call        Crlf
         mov         edx, [ebp+8]
         call        WriteString
         call        Crlf
@@ -38,8 +39,9 @@ L1:     mov         al, BYTE PTR [esi]
         call        WriteChar
         add         esi, TYPE DWORD
         loop        L1
-
-J1:     popad
+        
+J1:     call        Crlf
+        popad
         pop         ebp
         ret
 PrintArray ENDP
