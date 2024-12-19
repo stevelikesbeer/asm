@@ -1,13 +1,10 @@
 ; ml xx.asm -link /subsystem:console
 .386
 .model flat,stdcall
-.stack 4096
 
 IncludeLib  C:\Irvine\Kernel32.lib
 IncludeLib  C:\Irvine\User32.lib
 IncludeLib  C:\Irvine\Irvine32.lib
-
-ExitProcess     PROTO, dwExitCode:DWORD
 
 WriteString     PROTO   ; edx
 Crlf            PROTO   ;
@@ -15,9 +12,13 @@ ReadChar        PROTO   ;
 WriteChar       PROTO
 
 .code
-; PromptUser
-;   input: message pointer :DWORD
-;   output: eax
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;                       PromptUserChar
+; Description: Promps the user to enter a character
+; Input:
+;   PTR to Message: +12, DWORD
+; Output: EAX contains the character
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 PromptUserChar PROC
         push        ebp
         mov         ebp, esp
@@ -30,7 +31,7 @@ PromptUserChar PROC
         call        WriteChar
         call        Crlf
 
-        and          eax, 000000FFh
+        and         eax, 000000FFh                      ; We're only using AH, so zero out the rest of eax so we don't get junk
         pop         edx
         pop         ebp
         ret
