@@ -11,6 +11,10 @@ Crlf            PROTO   ;
 ReadChar        PROTO   ;
 WriteChar       PROTO
 
+.data
+        YesChar BYTE 'y'
+        NoChar  BYTE 'n'
+
 .code
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;                       PromptUserChar
@@ -36,4 +40,25 @@ PromptUserChar PROC
         pop         ebp
         ret
 PromptUserChar ENDP
+
+; input PTR Message
+; output: eax, 1 = yes, 0 = no
+PromptUserYesNo PROC
+        push        ebp
+        mov         ebp, esp
+
+        mov         edx, [ebp+8]
+        call        Crlf
+        call        WriteString
+        call        ReadChar
+        call        WriteChar
+        call        Crlf
+        cmp         al, YesChar
+        mov         eax, 0
+        jne         J1
+        mov         eax, 1
+
+J1:     pop         ebp
+        ret
+PromptUserYesNo ENDP
 END
