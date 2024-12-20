@@ -31,11 +31,10 @@ Extern PromptUserYesNo@0:PROC
         MessageRestart          BYTE "Would you Like to restart? (y/n): ",0
 .code
 main PROC
-        ; FillArrayAlphabet (PTRArray:DWORD, ArrayLength:DWORD)
+        ; FillArrayAlphabet (PTRArray:DWORD - Length >= 26)
 J1:     push        OFFSET MainArray
-        push        COUNT
         call        FillArrayAlphabet@0
-        add         esp, 8
+        add         esp, 4
 
         ; PrintArray (PTRArray:DWORD, ArrayLength:DWORD, PTRMessage:DWORD)
         push        OFFSET MainArray
