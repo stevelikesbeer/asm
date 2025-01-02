@@ -34,6 +34,15 @@ WriteConsoleA   PROTO,
 GetStdHandle    PROTO,
                     nStdHandle:DWORD
 
+; The WriteConsoleOutputCharacter function copies an array of characters to consecutive cells
+; of the console screen buffer, beginning at a specified location. Here is the prototype:
+WriteConsoleOutputCharacterA PROTO,
+    hConsoleOutput:DWORD,                               ; console output handle
+    lpCharacter:PTR BYTE,                               ; pointer to buffer
+    nLength:DWORD,                                      ; size of buffer
+    dwWriteCoord:COORD,                                 ; first cell coordinates
+    lpNumberOfCharsWritten:PTR DWORD                    ; output count
+
 ExitProcess     PROTO, dwExitCode:DWORD
 
 .data
